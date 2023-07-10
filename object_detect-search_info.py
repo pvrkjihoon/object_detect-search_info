@@ -13,7 +13,7 @@ import threading
 
 # models
 detect_model_path = "project/detection_model/ssdlite_mobilenet_v2_fp16.xml"
-wiki_model_path = "project/wiki_model/intel/bert-small-uncased-whole-word-masking-squad-int8-0002/FP16-INT8/bert-small-uncased-whole-word-masking-squad-int8-0002.xml"
+bert_model_path = "project/bert_model/intel/bert-small-uncased-whole-word-masking-squad-int8-0002/FP16-INT8/bert-small-uncased-whole-word-masking-squad-int8-0002.xml"
 
 ## load the models
 
@@ -21,26 +21,26 @@ wiki_model_path = "project/wiki_model/intel/bert-small-uncased-whole-word-maskin
 ie_core = ov.Core()
 # Read the network and corresponding weights from a file.
 detect_model = ie_core.read_model(detect_model_path)
-wiki_model = ie_core.read_model(wiki_model_path)
+bert_model = ie_core.read_model(bert_model_path)
 # Compile the model for CPU (you can choose manually CPU, GPU etc.)
 # or let the engine choose the best available device (AUTO).
 compiled_detect_model = ie_core.compile_model(model=detect_model, device_name="CPU")
-compiled_wiki_model = ie_core.compile_model(model=wiki_model, device_name="CPU")
+compiled_bert_model = ie_core.compile_model(model=bert_model, device_name="CPU")
 
 # Get the input and output nodes.
 input_layer = compiled_detect_model.input(0)
 output_layer = compiled_detect_model.output(0)
 
 # Get input and output names of nodes. ++
-input_keys = list(compiled_wiki_model.inputs)
-output_keys = list(compiled_wiki_model.outputs)
+input_keys = list(compiled_bert_model.inputs)
+output_keys = list(compiled_bert_model.outputs)
 
 # Get the input size.
 height, width = list(input_layer.shape)[1:3]
 input_layer.any_name, output_layer.any_name
 
 # Get the network input size. ++
-input_size = compiled_wiki_model.input(0).shape[1]
+input_size = compiled_bert_model.input(0).shape[1]
 [i.any_name for i in input_keys], [o.any_name for o in output_keys]
 
 ## global variables
@@ -73,7 +73,7 @@ thread_list = [''] * len(classes)
 ## processing ######################## interactive question answering model
 
 # The path to the vocabulary file.
-vocab_file_path = "project/wiki_model/vocab.txt"
+vocab_file_path = "project/bert_model/vocab.txt"
 
 # Create a dictionary with words and their indices.
 vocab = tokens.load_vocab_file(vocab_file_path)
@@ -217,11 +217,11 @@ def get_best_answer(question, context):
     for network_input, padding, start_idx in prepare_input(question_tokens=question_tokens,
                                                            context_tokens=context_tokens):
         # Get output layers.
-        output_start_key = compiled_wiki_model.output("output_s")
-        output_end_key = compiled_wiki_model.output("output_e")
+        output_start_key = compiled_bert_model.output("output_s")
+        output_end_key = compiled_bert_model.output("output_e")
 
         # OpenVINO inference.
-        result = compiled_wiki_model(network_input)
+        result = compiled_bert_model(network_input)
         # Postprocess the result, getting the score and context range for the answer.
         score_start_end = postprocess(output_start=result[output_start_key][0],
                                       output_end=result[output_end_key][0],
