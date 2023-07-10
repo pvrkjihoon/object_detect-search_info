@@ -1,10 +1,10 @@
 # Project name
 
-* (간략히 전체 프로젝트를 설명하고, 최종 목표가 무엇인지에 대해 기술)
+object_detect-search_info
+실시간으로 객체를 인식하고, 객체의 정보를 검색해 송출하는것이 목표입니다.
 
 ## Requirement
 
-* (프로젝트를 실행시키기 위한 최소 requirement들에 대해 기술)
 
 ```
 * 10th generation Intel® CoreTM processor onwards
@@ -18,7 +18,7 @@
 * (Code clone 방법에 대해서 기술)
 
 ```shell
-git clone https://github.com/zzz/yyy/xxxx
+git clone https://github.com/pvrkjihoon/object_detect-search_info/blob/main/object_detect-search_info.py
 ```
 
 ## Prerequite
