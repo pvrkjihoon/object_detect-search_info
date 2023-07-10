@@ -1,6 +1,5 @@
-# Project name
+# 실시간 객체 정보 제공
 
-object_detect-search_info
 실시간으로 객체를 인식하고, 객체의 정보를 검색해 송출하는것이 목표입니다.
 
 ## Requirement
@@ -36,6 +35,8 @@ python -m pip install openvino-dev
 
 cd /path/to/repo/xxx/
 python -m pip install -r requirements.txt
+
+omz_downloader --name bert-small-uncased-whole-word-masking-squad-int8-0002 --precision FP16-INT8 --output_dir bert_model --cache_dir bert_model
 ```
 
 ## Steps to build
